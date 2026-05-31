@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAB Trophy 2026</title>
+<style>
+/* ===== Reset & Base ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f3f4f6;color:#1f2937;font-size:14px;line-height:1.5}
+a{color:#2563eb;text-decoration:none}a:hover{text-decoration:underline}
+button{cursor:pointer;font:inherit}
+input,select,textarea{font:inherit;padding:6px 10px;border:1px solid #d1d5db;border-radius:6px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+table{border-collapse:collapse;width:100%}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid #e5e7eb}
+th{background:#f9fafb;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;font-weight:600}
+
+/* ===== Layout ===== */
+.app{max-width:1400px;margin:0 auto;padding:8px}
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#dbeafe,#e9d5ff)}
+.login-card{background:#fff;padding:32px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);width:100%;max-width:380px}
+.login-card h1{font-size:24px;font-weight:700;text-align:center;margin-bottom:24px}
+.hidden{display:none!important}
+
+/* ===== Navbar ===== */
+.navbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 0;margin-bottom:12px;border-bottom:1px solid #e5e7eb;min-height:40px;font-size:13px}
+.navbar .user-info{color:#374151}
+.navbar .user-info .name{font-weight:600}
+.navbar .role-badge{font-size:11px;padding:2px 8px;border-radius:12px;background:#f3f4f6;color:#4b5563;margin-left:6px}
+.nav-dropdown{position:relative}
+.nav-dropdown-btn{background:none;border:none;font-weight:600;font-size:13px;padding:4px 8px;border-radius:4px}
+.nav-dropdown-btn:hover{background:#f3f4f6}
+.nav-dropdown-menu{position:absolute;top:100%;left:0;margin-top:4px;background:#fff;border:1px solid #d1d5db;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.1);min-width:160px;z-index:50;padding:4px 0}
+.nav-dropdown-menu a,.nav-dropdown-menu button{display:block;width:100%;text-align:left;padding:8px 16px;font-size:13px;border:none;background:none;color:#1f2937}
+.nav-dropdown-menu a:hover,.nav-dropdown-menu button:hover{background:#f3f4f6;text-decoration:none}
+.nav-link{font-weight:500;padding:4px 8px;border-radius:4px}
+.nav-link:hover{background:#f3f4f6;text-decoration:none}
+.nav-link.blue{color:#2563eb}.nav-link.purple{color:#7c3aed}.nav-link.emerald{color:#059669}.nav-link.red{color:#dc2626}
+.logout-btn{margin-left:auto;color:#ef4444;background:none;border:none;font-weight:500;font-size:13px}
+.logout-btn:hover{text-decoration:underline}
+
+/* ===== Buttons ===== */
+.btn{padding:8px 16px;border-radius:6px;font-weight:600;font-size:13px;border:none;display:inline-flex;align-items:center;gap:6px;transition:background .15s}
+.btn-blue{background:#2563eb;color:#fff}.btn-blue:hover{background:#1d4ed8}
+.btn-green{background:#16a34a;color:#fff}.btn-green:hover{background:#15803d}
+.btn-red{background:#dc2626;color:#fff}.btn-red:hover{background:#b91c1c}
+.btn-gray{background:#6b7280;color:#fff}.btn-gray:hover{background:#4b5563}
+.btn-outline{background:#fff;border:1px solid #d1d5db;color:#374151}.btn-outline:hover{background:#f3f4f6}
+.btn-sm{padding:4px 10px;font-size:12px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== Cards & Badges ===== */
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600}
+.badge-green{background:#dcfce7;color:#166534}.badge-red{background:#fee2e2;color:#991b1b}
+.badge-yellow{background:#fef9c3;color:#854d0e}.badge-blue{background:#dbeafe;color:#1e40af}
+.badge-purple{background:#ede9fe;color:#5b21b6}.badge-teal{background:#ccfbf1;color:#115e59}
+.badge-gray{background:#f3f4f6;color:#374151}
+
+/* ===== Review Page ===== */
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:768px){.review-grid{grid-template-columns:1fr}}
+.review-nav{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.review-progress{margin-left:auto;font-size:16px;font-weight:600;color:#374151}
+.decision-btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.decision-btn{padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;border:2px solid;background:#fff;display:inline-flex;align-items:center;gap:4px;transition:all .15s}
+.decision-btn.approve{border-color:#16a34a;color:#15803d}.decision-btn.approve:hover{background:#f0fdf4}
+.decision-btn.approve.active{background:#16a34a;color:#fff;border-color:#16a34a}
+.decision-btn.reject{border-color:#dc2626;color:#b91c1c}.decision-btn.reject:hover{background:#fef2f2}
+.decision-btn.reject.active{background:#dc2626;color:#fff;border-color:#dc2626}
+.decision-btn.undecided{border-color:#6b7280;color:#374151}.decision-btn.undecided:hover{background:#f9fafb}
+.decision-btn.undecided.active{background:#6b7280;color:#fff;border-color:#6b7280}
+
+/* ===== Image Gallery ===== */
+.img-gallery{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+.img-thumb{position:relative;border:1px solid #e5e7eb;border-radius:6px;padding:4px;background:#fff;cursor:pointer;transition:box-shadow .15s}
+.img-thumb:hover{box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.img-thumb img{height:280px;object-fit:contain;display:block}
+.img-thumb .img-label{position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:1px 6px;border-radius:4px}
+.lightbox{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);display:flex;flex-direction:column}
+.lightbox-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;color:#fff;font-size:13px;background:rgba(0,0,0,.4)}
+.lightbox-bar button{padding:4px 10px;border-radius:4px;background:rgba(255,255,255,.1);color:#fff;border:none;font-size:12px}
+.lightbox-bar button:disabled{opacity:.3}
+.lightbox-bar .close-btn{background:rgba(239,68,68,.7)}.lightbox-bar .close-btn:hover{background:#dc2626}
+.lightbox-body{flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:grab}
+.lightbox-body:active{cursor:grabbing}
+.lightbox-body img{max-width:100%;max-height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none}
+
+/* ===== Judgement History ===== */
+.judgement-list{max-height:200px;overflow-y:auto;padding-right:4px}
+.judgement-item{border:1px solid #e5e7eb;border-radius:6px;padding:8px;margin-bottom:6px;font-size:12px}
+.judgement-item.yes{border-color:#86efac;background:#f0fdf4}
+.judgement-item.no{border-color:#fca5a5;background:#fef2f2}
+.judgement-item.maybe{border-color:#d1d5db;background:#f9fafb}
+
+/* ===== Filters ===== */
+.filter-bar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.filter-group{display:flex;align-items:center;gap:6px}
+.filter-group label{font-size:12px;font-weight:600;color:#374151}
+.filter-group select{font-size:13px;padding:4px 8px}
+.filter-btns{display:flex;gap:4px}
+.filter-btn{padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid #d1d5db;background:#fff;color:#374151}
+.filter-btn:hover{background:#f3f4f6}
+.filter-btn.active{background:#2563eb;color:#fff;border-color:#2563eb}
+
+/* ===== Stats Bar ===== */
+.stats-bar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;font-size:13px}
+.stat-box{padding:8px 12px;border-radius:6px;background:#f9fafb}
+.stat-box.green{background:#f0fdf4}.stat-box.blue{background:#eff6ff}.stat-box.purple{background:#faf5ff;border:1px solid #e9d5ff}
+.stat-box.amber{background:#fffbeb;border:1px solid #fde68a}
+
+/* ===== Overview Table ===== */
+.judgement-votes{display:flex;gap:6px;justify-content:center}
+.vote-badge{padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.vote-badge.yes{background:#dcfce7;color:#166534}.vote-badge.maybe{background:#fef9c3;color:#854d0e}.vote-badge.no{background:#fee2e2;color:#991b1b}
+tr.selected-row{background:#f0fdf4}
+tr:hover{background:#f9fafb}
+
+/* ===== Grid Editing ===== */
+.editable-grid{overflow-x:auto}
+.editable-grid td input{width:100%;border:none;padding:4px;background:transparent}
+.editable-grid td input:focus{background:#eff6ff;border-radius:4px}
+.grid-search{margin-bottom:12px}
+.grid-search input{width:100%;max-width:400px}
+
+/* ===== Admin ===== */
+.admin-form{background:#f9fafb;padding:24px;border-radius:8px;margin-bottom:24px}
+.admin-form .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.admin-form .form-grid{grid-template-columns:1fr}}
+.admin-form label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px}
+
+/* ===== Misc ===== */
+.text-center{text-align:center}
+.text-right{text-align:right}
+.text-muted{color:#6b7280}
+.text-sm{font-size:12px}
+.text-xs{font-size:11px}
+.text-error{color:#dc2626}
+.text-success{color:#16a34a}
+.mt-2{margin-top:8px}.mt-4{margin-top:16px}.mb-2{margin-bottom:8px}.mb-4{margin-bottom:16px}
+.flex{display:flex}.gap-2{gap:8px}.gap-3{gap:12px}.items-center{align-items:center}.flex-wrap{flex-wrap:wrap}
+.ml-auto{margin-left:auto}
+.w-full{width:100%}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid #d1d5db;border-top-color:#3b82f6;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- ==================== LOGIN SCREEN ==================== -->
+<div id="loginScreen" class="login-wrap">
+  <div class="login-card">
+    <h1>BAB Trophy 2026</h1>
+    <div>
+      <label style="display:block;font-weight:600;margin-bottom:6px">Email</label>
+      <input id="loginEmail" type="email" class="w-full" required>
+    </div>
+    <div style="margin-top:16px">
+      <label style="display:block;font-weight:600;margin-bottom:6px">Password</label>
+      <input id="loginPassword" type="password" class="w-full" required>
+    </div>
+    <div id="loginError" class="text-error mt-2 hidden"></div>
+    <button id="loginBtn" class="btn btn-blue w-full mt-4" onclick="doLogin()">Login</button>
+  </div>
+</div>
+
+<!-- ==================== MAIN APP ==================== -->
+<div id="mainApp" class="app hidden">
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar"></nav>
+
+  <!-- Page containers -->
+  <div id="page-review" class="page-content hidden"></div>
+  <div id="page-overview" class="page-content hidden"></div>
+  <div id="page-grid" class="page-content hidden"></div>
+  <div id="page-admin" class="page-content hidden"></div>
+  <div id="page-entries" class="page-content hidden"></div>
+  <div id="page-placement" class="page-content hidden"></div>
+</div>
+
+<script>
+// ===== Configuration =====
+window.CLOUDFLARE_WORKER_URL = 'https://babtrophy.lady-qwickske.workers.dev/';
+window.GAS_WEB_APP_URL = window.CLOUDFLARE_WORKER_URL;
+</script>
+<script>
+// ===========================
+// STATE
+// ===========================
+let currentUser = null;
+let authToken = null;
+let registrations = [];
+let allEntries = []; // for overview
+let currentPage = null;
+
+// Review state
+let reviewType = 'bonsai'; // bonsai | kifu | shohin
+let reviewFilter = 'undecided';
+let reviewItems = [];
+let reviewIndex = 0;
+let reviewDecision = null;
+let reviewComment = '';
+let reviewJudgements = [];
+let reviewDirty = false;
+
+// Lightbox state
+let lightboxImages = [];
+let lightboxIndex = 0;
+let lightboxZoom = 1;
+let lightboxOffset = { x: 0, y: 0 };
+let lightboxDragging = false;
+let lightboxDragStart = null;
+
+// ===========================
+// API HELPER
+// ===========================
+async function api(fn, ...args) {
+  const url = window.GAS_WEB_APP_URL || '';
+  const token = localStorage.getItem('bab_auth_token') || '';
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'api', fn, args, token })
+  });
+  const json = await res.json();
+  if (!json || json.ok !== true) throw new Error(json?.error || 'API error');
+  return json.data;
+}
+
+// ===========================
+// AUTH
+// ===========================
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+  errEl.classList.add('hidden');
+  btn.disabled = true;
+  btn.textContent = 'Logging in...';
+  try {
+    const result = await api('jurorLogin', email, password);
+    if (result && result.success) {
+      authToken = result.token;
+      localStorage.setItem('bab_auth_token', authToken);
+      currentUser = result;
+      showApp();
+    } else {
+      errEl.textContent = 'Invalid credentials.';
+      errEl.classList.remove('hidden');
+    }
+  } catch (e) {
+    errEl.textContent = 'Login failed: ' + e.message;
+    errEl.classList.remove('hidden');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Login';
+  }
+}
+
+function doLogout() {
+  currentUser = null;
+  authToken = null;
+  localStorage.removeItem('bab_auth_token');
+  document.getElementById('mainApp').classList.add('hidden');
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('loginPassword').value = '';
+}
+
+async function checkSession() {
+  const token = localStorage.getItem('bab_auth_token');
+  if (!token) return;
+  try {
+    const result = await api('verifySession', token);
+    if (result && result.success) {
+      currentUser = result;
+      authToken = token;
+      showApp();
+    }
+  } catch (e) {
+    localStorage.removeItem('bab_auth_token');
+  }
+}
+
+// ===========================
+// APP SHELL
+// ===========================
+function showApp() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('mainApp').classList.remove('hidden');
+  renderNavbar();
+  // Navigate to first accessible page
+  if (currentUser.canAccessBonsai) navigateTo('review', 'bonsai');
+  else if (currentUser.canAccessKifu) navigateTo('review', 'kifu');
+  else if (currentUser.canAccessShohin) navigateTo('review', 'shohin');
+  else navigateTo('overview');
+}
+
+function renderNavbar() {
+  const u = currentUser;
+  const isMod = u.isAdmin || u.canModerate;
+  let html = `<span class="user-info">Logged in as: <span class="name">${esc(u.name)}</span><span class="role-badge">${esc(u.roleDisplay || u.role)}</span></span>`;
+
+  if (!isMod) {
+    // Simple links for jurors
+    if (u.canAccessBonsai) html += `<a class="nav-link blue" href="#" onclick="navigateTo('review','bonsai');return false">Bonsai</a>`;
+    if (u.canAccessKifu) html += `<a class="nav-link blue" href="#" onclick="navigateTo('review','kifu');return false">Kifu</a>`;
+    if (u.canAccessShohin) html += `<a class="nav-link blue" href="#" onclick="navigateTo('review','shohin');return false">Shohin</a>`;
+  } else {
+    // Judgements dropdown
+    html += `<div class="nav-dropdown">
+      <button class="nav-dropdown-btn" style="color:#2563eb" onclick="toggleDropdown(this)">Judgements ▾</button>
+      <div class="nav-dropdown-menu hidden">
+        ${u.canAccessBonsai ? '<a href="#" onclick="navigateTo(\'review\',\'bonsai\');closeDropdowns();return false">Bonsai</a>' : ''}
+        ${u.canAccessKifu ? '<a href="#" onclick="navigateTo(\'review\',\'kifu\');closeDropdowns();return false">Kifu</a>' : ''}
+        ${u.canAccessShohin ? '<a href="#" onclick="navigateTo(\'review\',\'shohin\');closeDropdowns();return false">Shohin</a>' : ''}
+      </div></div>`;
+    // Modification dropdown
+    html += `<div class="nav-dropdown">
+      <button class="nav-dropdown-btn" style="color:#7c3aed" onclick="toggleDropdown(this)">Modification ▾</button>
+      <div class="nav-dropdown-menu hidden">
+        ${u.canAccessBonsai ? '<a href="#" onclick="navigateTo(\'grid\',\'bonsai\');closeDropdowns();return false">Bonsai Grid</a>' : ''}
+        ${u.canAccessKifu ? '<a href="#" onclick="navigateTo(\'grid\',\'kifu\');closeDropdowns();return false">Kifu Grid</a>' : ''}
+        ${u.canAccessShohin ? '<a href="#" onclick="navigateTo(\'grid\',\'shohin\');closeDropdowns();return false">Shohin Grid</a>' : ''}
+        <a href="#" onclick="navigateTo('entries');closeDropdowns();return false" style="color:#ea580c">Edit Entries</a>
+      </div></div>`;
+    // Administration dropdown
+    html += `<div class="nav-dropdown">
+      <button class="nav-dropdown-btn" style="color:#059669" onclick="toggleDropdown(this)">Administration ▾</button>
+      <div class="nav-dropdown-menu hidden">
+        <a href="#" onclick="navigateTo('overview');closeDropdowns();return false">Judgement Overview</a>
+        <a href="#" onclick="navigateTo('placement');closeDropdowns();return false" style="color:#4f46e5">Exhibition Placement</a>
+      </div></div>`;
+  }
+  if (u.isAdmin) {
+    html += `<a class="nav-link red" href="#" onclick="navigateTo('admin');return false">Admin</a>`;
+  }
+  html += `<button class="logout-btn" onclick="doLogout()">Logout</button>`;
+  document.getElementById('navbar').innerHTML = html;
+}
+
+function toggleDropdown(btn) {
+  const menu = btn.nextElementSibling;
+  const wasHidden = menu.classList.contains('hidden');
+  closeDropdowns();
+  if (wasHidden) menu.classList.remove('hidden');
+}
+function closeDropdowns() {
+  document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.add('hidden'));
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.nav-dropdown')) closeDropdowns();
+});
+
+function navigateTo(page, subtype) {
+  // Hide all pages
+  document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+  currentPage = page;
+
+  switch (page) {
+    case 'review':
+      reviewType = subtype || 'bonsai';
+      document.getElementById('page-review').classList.remove('hidden');
+      loadReviewPage();
+      break;
+    case 'overview':
+      document.getElementById('page-overview').classList.remove('hidden');
+      loadOverviewPage();
+      break;
+    case 'grid':
+      reviewType = subtype || 'bonsai';
+      document.getElementById('page-grid').classList.remove('hidden');
+      loadGridPage();
+      break;
+    case 'admin':
+      document.getElementById('page-admin').classList.remove('hidden');
+      loadAdminPage();
+      break;
+    case 'entries':
+      document.getElementById('page-entries').classList.remove('hidden');
+      loadEntriesPage();
+      break;
+    case 'placement':
+      document.getElementById('page-placement').classList.remove('hidden');
+      loadPlacementPage();
+      break;
+  }
+}
+
+// ===========================
+// REVIEW PAGE (Judging)
+// ===========================
+async function loadReviewPage() {
+  const container = document.getElementById('page-review');
+  container.innerHTML = '<div class="text-muted">Loading trees...</div>';
+  try {
+    registrations = await api('getUserRegistrations', false);
+    buildReviewItems();
+    await filterReviewItems();
+    renderReview();
+  } catch (e) {
+    container.innerHTML = `<div class="text-error">Failed to load: ${esc(e.message)}</div>`;
+  }
+}
+
+function buildReviewItems() {
+  reviewItems = [];
+  for (const reg of registrations) {
+    if (reviewType === 'bonsai' && reg.bonsaiTree && !reg.bonsaiTree.outOfCompetition) {
+      reviewItems.push({ ...reg.bonsaiTree, ownerName: (reg.firstName || '') + ' ' + (reg.lastName || '') });
+    }
+    if (reviewType === 'kifu' && reg.kifuTree && !reg.kifuTree.outOfCompetition) {
+      const k = reg.kifuTree;
+      k.treeID = k.treeID || k.kifuID;
+      reviewItems.push({ ...k, ownerName: (reg.firstName || '') + ' ' + (reg.lastName || '') });
+    }
+    if (reviewType === 'shohin' && reg.shohinComposition && !reg.shohinComposition.outOfCompetition) {
+      reviewItems.push({ ...reg.shohinComposition, ownerName: (reg.firstName || '') + ' ' + (reg.lastName || '') });
+    }
+  }
+}
+
+async function filterReviewItems() {
+  if (reviewFilter === 'all') return;
+  const filtered = [];
+  for (const item of reviewItems) {
+    try {
+      const judgements = await api('getJudgementsForTree', item.treeID);
+      const mine = judgements.find(j => j.jurorId === currentUser.id);
+      if (reviewFilter === 'selected' && mine && mine.decision === 1) filtered.push(item);
+      else if (reviewFilter === 'not_selected' && mine && mine.decision === -1) filtered.push(item);
+      else if (reviewFilter === 'undecided' && (!mine || mine.decision === 0)) filtered.push(item);
+    } catch {
+      if (reviewFilter === 'undecided') filtered.push(item);
+    }
+  }
+  reviewItems = filtered;
+}
+
+function renderReview() {
+  const container = document.getElementById('page-review');
+  const typeLabel = reviewType.charAt(0).toUpperCase() + reviewType.slice(1);
+
+  if (reviewItems.length === 0) {
+    container.innerHTML = `
+      <div class="flex items-center gap-3 mb-4"><h1 style="font-size:20px;font-weight:700">${typeLabel} Review</h1>${renderFilterButtons()}</div>
+      <div class="text-center mt-4"><div style="font-size:18px;font-weight:600;color:#374151">No entries found for this filter.</div>
+      <div class="text-muted mt-2">Try a different filter.</div></div>`;
+    return;
+  }
+
+  const item = reviewItems[reviewIndex] || reviewItems[0];
+  if (!item) return;
+  reviewIndex = Math.min(reviewIndex, reviewItems.length - 1);
+
+  // Load judgements for current item
+  loadJudgementsForCurrent();
+
+  container.innerHTML = `
+    <div class="flex items-center gap-3 mb-4" style="flex-wrap:wrap">
+      <h1 style="font-size:20px;font-weight:700">${typeLabel} Review</h1>
+      ${renderFilterButtons()}
+    </div>
+    <div class="review-grid">
+      <div>
+        ${renderTreeInfo(item)}
+        <div class="mt-4">
+          <div style="font-weight:600;margin-bottom:8px">Images</div>
+          <div class="img-gallery" id="reviewGallery"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="review-nav">
+          <button class="btn btn-outline btn-sm" onclick="reviewPrev()" ${reviewIndex === 0 ? 'disabled' : ''}>Previous</button>
+          <button class="btn ${reviewIndex === reviewItems.length - 1 ? 'btn-green' : 'btn-outline'} btn-sm" onclick="reviewNextOrFinish()">${reviewIndex === reviewItems.length - 1 ? 'Finish' : 'Next'}</button>
+          <div class="review-progress">${reviewIndex + 1} <span class="text-muted">/ ${reviewItems.length}</span></div>
+        </div>
+        <div class="mb-4">
+          <div class="text-sm" style="font-weight:500;margin-bottom:4px">Your Decision</div>
+          <div class="decision-btns">
+            <button class="decision-btn approve ${reviewDecision === 1 ? 'active' : ''}" onclick="setReviewDecision(1)">✓ Approve</button>
+            <button class="decision-btn reject ${reviewDecision === -1 ? 'active' : ''}" onclick="setReviewDecision(-1)">✗ Reject</button>
+            <button class="decision-btn undecided ${reviewDecision === 0 ? 'active' : ''}" onclick="setReviewDecision(0)">— Undecided</button>
+            <button class="btn btn-outline btn-sm" onclick="resetReviewDecision()">Reset</button>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label style="display:block;font-size:12px;font-weight:500;margin-bottom:4px">Comments</label>
+          <textarea id="reviewCommentBox" class="w-full" rows="4" placeholder="Optional comments" oninput="reviewComment=this.value;reviewDirty=true"></textarea>
+        </div>
+        <div class="flex items-center gap-3 mb-4">
+          <button class="btn btn-green btn-sm" id="saveJudgementBtn" onclick="saveCurrentJudgement()" ${reviewDecision === null ? 'disabled' : ''}>Save</button>
+          <span class="text-sm" id="decisionStatus"></span>
+        </div>
+        <hr style="margin:16px 0">
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:8px">Previous Judgements</div>
+          <div class="judgement-list" id="judgementList"><div class="text-muted text-sm">Loading...</div></div>
+        </div>
+      </div>
+    </div>`;
+
+  // Render images
+  renderReviewImages(item);
+}
+
+function renderFilterButtons() {
+  const filters = [
+    { key: 'undecided', label: 'Undecided' },
+    { key: 'selected', label: 'Approved' },
+    { key: 'not_selected', label: 'Rejected' },
+    { key: 'all', label: 'All' }
+  ];
+  return `<div class="filter-btns">${filters.map(f =>
+    `<button class="filter-btn ${reviewFilter === f.key ? 'active' : ''}" onclick="setReviewFilter('${f.key}')">${f.label}</button>`
+  ).join('')}</div>`;
+}
+
+async function setReviewFilter(f) {
+  reviewFilter = f;
+  reviewIndex = 0;
+  reviewDecision = null;
+  reviewComment = '';
+  reviewDirty = false;
+  buildReviewItems();
+  await filterReviewItems();
+  renderReview();
+}
+
+function setReviewDecision(d) {
+  reviewDecision = d;
+  reviewDirty = true;
+  // Update button states
+  document.querySelectorAll('.decision-btn').forEach(btn => btn.classList.remove('active'));
+  if (d === 1) document.querySelector('.decision-btn.approve').classList.add('active');
+  else if (d === -1) document.querySelector('.decision-btn.reject').classList.add('active');
+  else if (d === 0) document.querySelector('.decision-btn.undecided').classList.add('active');
+  document.getElementById('saveJudgementBtn').disabled = false;
+  updateDecisionStatus();
+}
+
+function resetReviewDecision() {
+  reviewDecision = null;
+  reviewComment = '';
+  reviewDirty = false;
+  const box = document.getElementById('reviewCommentBox');
+  if (box) box.value = '';
+  document.querySelectorAll('.decision-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('saveJudgementBtn').disabled = true;
+  updateDecisionStatus();
+}
+
+function updateDecisionStatus() {
+  const el = document.getElementById('decisionStatus');
+  if (!el) return;
+  const labels = { 1: 'Approved', '-1': 'Rejected', 0: 'Undecided' };
+  const colors = { 1: 'text-success', '-1': 'text-error', 0: 'text-muted' };
+  if (reviewDecision !== null) {
+    el.className = 'text-sm ' + (colors[reviewDecision] || '');
+    el.textContent = 'Current: ' + (labels[reviewDecision] || '') + (reviewDirty ? ' (unsaved)' : '');
+  } else {
+    el.className = 'text-sm text-muted';
+    el.textContent = '';
+  }
+}
+
+async function saveCurrentJudgement() {
+  if (reviewDecision === null || !reviewItems[reviewIndex]) return false;
+  const item = reviewItems[reviewIndex];
+  const btn = document.getElementById('saveJudgementBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  try {
+    await api('addJudgement', {
+      jurorId: currentUser.id,
+      treeId: item.treeID,
+      decision: reviewDecision,
+      comments: reviewComment || '',
+      judgementDate: new Date().toISOString()
+    });
+    reviewDirty = false;
+    await loadJudgementsForCurrent();
+    updateDecisionStatus();
+    return true;
+  } catch (e) {
+    alert('Failed to save: ' + e.message);
+    return false;
+  } finally {
+    btn.disabled = reviewDecision === null;
+    btn.textContent = 'Save';
+  }
+}
+
+async function reviewPrev() {
+  if (reviewIndex === 0) return;
+  if (reviewDirty && reviewDecision !== null) { if (!(await saveCurrentJudgement())) return; }
+  reviewIndex--;
+  reviewDecision = null;
+  reviewComment = '';
+  reviewDirty = false;
+  renderReview();
+}
+
+async function reviewNextOrFinish() {
+  if (reviewIndex === reviewItems.length - 1) {
+    if (reviewDirty && reviewDecision !== null) await saveCurrentJudgement();
+    document.getElementById('page-review').innerHTML = `
+      <div class="text-center mt-4">
+        <h2 style="font-size:20px;font-weight:700;color:#15803d">Review Complete</h2>
+        <div class="text-muted mt-2">You have finished judging all entries.</div>
+        <button class="btn btn-blue mt-4" onclick="setReviewFilter('all')">Go to All Overview</button>
+      </div>`;
+    return;
+  }
+  if (reviewDirty && reviewDecision !== null) { if (!(await saveCurrentJudgement())) return; }
+  reviewIndex++;
+  reviewDecision = null;
+  reviewComment = '';
+  reviewDirty = false;
+  renderReview();
+}
+
+async function loadJudgementsForCurrent() {
+  const item = reviewItems[reviewIndex];
+  if (!item) return;
+  try {
+    reviewJudgements = await api('getJudgementsForTree', item.treeID);
+    renderJudgementList();
+  } catch { reviewJudgements = []; renderJudgementList(); }
+}
+
+function renderJudgementList() {
+  const el = document.getElementById('judgementList');
+  if (!el) return;
+  if (reviewJudgements.length === 0) {
+    el.innerHTML = '<div class="text-muted text-sm">No judgements yet.</div>';
+    return;
+  }
+  const canDelete = currentUser.isAdmin || currentUser.canModerate;
+  el.innerHTML = reviewJudgements.map(j => {
+    const cls = j.decision === 1 ? 'yes' : j.decision === -1 ? 'no' : 'maybe';
+    const label = j.decision === 1 ? 'Approved' : j.decision === -1 ? 'Rejected' : 'Undecided';
+    const badgeCls = j.decision === 1 ? 'badge-green' : j.decision === -1 ? 'badge-red' : 'badge-gray';
+    return `<div class="judgement-item ${cls}">
+      <div class="flex items-center" style="justify-content:space-between">
+        <span style="font-weight:500">${esc(j.juror ? j.juror.name : '')}</span>
+        <div class="flex items-center gap-2">
+          <span class="badge ${badgeCls}">${label}</span>
+          ${canDelete ? `<button class="btn btn-red btn-sm" style="padding:2px 6px;font-size:10px" onclick="deleteJudgement(${j.id})" title="Delete">🗑</button>` : ''}
+        </div>
+      </div>
+      ${j.comments ? `<div class="mt-2 text-sm" style="white-space:pre-line">${esc(j.comments)}</div>` : ''}
+      <div class="text-xs text-muted mt-2">${j.judgementDate ? new Date(j.judgementDate).toLocaleString() : ''}</div>
+    </div>`;
+  }).join('');
+
+  // Check if current user already judged
+  const existing = reviewJudgements.find(j => j.jurorId === currentUser.id);
+  if (existing) {
+    const label = existing.decision === 1 ? 'Approved' : existing.decision === -1 ? 'Rejected' : 'Undecided';
+    el.innerHTML += `<div class="text-sm mt-2" style="color:#2563eb">You previously submitted: ${label}</div>`;
+  }
+}
+
+async function deleteJudgement(id) {
+  if (!confirm('Delete this judgement? This cannot be undone.')) return;
+  try {
+    await api('deleteJudgement', id);
+    await loadJudgementsForCurrent();
+  } catch (e) {
+    alert('Failed to delete: ' + e.message);
+  }
+}
+
+// ===========================
+// TREE INFO RENDERING
+// ===========================
+function renderTreeInfo(item) {
+  if (reviewType === 'bonsai') {
+    return `<div class="card">
+      <div class="badge badge-blue mb-2">${esc(item.treeID || '')}</div>
+      <div><strong>Tree:</strong> ${esc(item.tree || '')}</div>
+      <div><strong>Style:</strong> ${esc(item.style || '')}</div>
+      <div><strong>Origin:</strong> ${esc(item.origin || '')}</div>
+      <div><strong>Pot:</strong> ${esc(item.potOrigin || '')} — ${esc(item.potInformation || '')}</div>
+      <div><strong>Size:</strong> h: ${esc(item.height || '')} cm, total: ${esc(item.totalHeight || '')} × ${esc(item.totalWidth || '')} cm</div>
+    </div>`;
+  }
+  if (reviewType === 'kifu') {
+    return `<div class="card">
+      <div class="badge badge-purple mb-2">${esc(item.treeID || item.kifuID || '')}</div>
+      <div><strong>Kifu 1:</strong> ${esc(item.kifu || '')} (${esc(item.style || '')})</div>
+      <div><strong>Kifu 2:</strong> ${esc(item.kifu2 || '')} (${esc(item.style2 || '')})</div>
+      <div><strong>Pot 1:</strong> ${esc(item.potOrigin || '')} — ${esc(item.potInformation || '')}</div>
+      <div><strong>Pot 2:</strong> ${esc(item.pot2Origin || '')} — ${esc(item.pot2Information || '')}</div>
+      <div><strong>Heights:</strong> ${esc(item.height || '')} / ${esc(item.height2 || '')} cm</div>
+      <div><strong>Total:</strong> ${esc(item.totalHeight || '')} × ${esc(item.totalWidth || '')} cm</div>
+    </div>`;
+  }
+  if (reviewType === 'shohin') {
+    const trees = [item.topTree, item.lowerTree1, item.lowerTree2, item.lowerTree3,
+      item.lowerTree4, item.lowerTree5, item.bottomTree1, item.bottomTree2].filter(Boolean);
+    return `<div class="card">
+      <div class="badge badge-teal mb-2">${esc(item.treeID || '')}</div>
+      <div><strong>Top:</strong> ${esc(item.topTree || '')}</div>
+      <div><strong>Lower:</strong> ${trees.slice(1, 6).map(esc).join(', ') || '—'}</div>
+      <div><strong>Bottom:</strong> ${[item.bottomTree1, item.bottomTree2].filter(Boolean).map(esc).join(', ') || '—'}</div>
+      <div><strong>Width:</strong> ${esc(item.width || '')} cm</div>
+    </div>`;
+  }
+  return '<div class="card text-muted">Unknown entry type</div>';
+}
+
+// ===========================
+// IMAGE GALLERY
+// ===========================
+function renderReviewImages(item) {
+  const gallery = document.getElementById('reviewGallery');
+  if (!gallery) return;
+  const images = collectImages(item);
+  if (images.length === 0) {
+    gallery.innerHTML = '<div class="text-muted text-sm">No images available.</div>';
+    return;
+  }
+  gallery.innerHTML = images.map((img, i) => `
+    <div class="img-thumb" onclick="openLightbox(${i})">
+      <img src="${esc(img.url)}" alt="${esc(img.label)}" loading="lazy">
+      <span class="img-label">${esc(img.label)}</span>
+    </div>
+  `).join('');
+  lightboxImages = images;
+}
+
+function collectImages(item) {
+  const candidates = [
+    [item.imageCompositionUrl, 'Composition'],
+    [item.image2Url, 'Image 2'],
+    [item.image3Url, 'Image 3']
+  ];
+  const seen = new Set();
+  const result = [];
+  for (const [url, label] of candidates) {
+    if (!url || typeof url !== 'string') continue;
+    const trimmed = url.trim();
+    if (!trimmed || trimmed.toLowerCase() === 'null' || trimmed.toLowerCase() === 'undefined') continue;
+    if (seen.has(trimmed)) continue;
+    seen.add(trimmed);
+    result.push({ url: trimmed, label });
+  }
+  return result;
+}
+
+function openLightbox(idx) {
+  lightboxIndex = idx;
+  lightboxZoom = 1;
+  lightboxOffset = { x: 0, y: 0 };
+  const img = lightboxImages[idx];
+  if (!img) return;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'lightbox';
+  overlay.id = 'lightbox';
+  overlay.innerHTML = `
+    <div class="lightbox-bar">
+      <div><strong>${esc(img.label)}</strong> <span class="text-muted">Image ${idx + 1} / ${lightboxImages.length}</span></div>
+      <div class="flex gap-2">
+        <button onclick="lightboxNav(-1)" ${idx === 0 ? 'disabled' : ''}>Prev</button>
+        <button onclick="lightboxNav(1)" ${idx === lightboxImages.length - 1 ? 'disabled' : ''}>Next</button>
+        <button onclick="lightboxZoomIn()">+</button>
+        <button onclick="lightboxZoomOut()">−</button>
+        <button class="close-btn" onclick="closeLightbox()">Close</button>
+      </div>
+    </div>
+    <div class="lightbox-body" id="lightboxBody"
+         onwheel="lightboxWheel(event)"
+         onmousedown="lightboxMouseDown(event)"
+         onmousemove="lightboxMouseMove(event)"
+         onmouseup="lightboxMouseUp()"
+         onmouseleave="lightboxMouseUp()">
+      <img id="lightboxImg" src="${esc(img.url)}" alt="${esc(img.label)}" draggable="false"
+           style="transform:translate(0px,0px) scale(1)">
+    </div>
+    <div style="padding:8px;text-align:center;font-size:11px;color:#9ca3af;background:rgba(0,0,0,.4)">
+      Scroll to zoom. Drag to pan when zoomed.
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function closeLightbox() {
+  const el = document.getElementById('lightbox');
+  if (el) el.remove();
+  lightboxDragging = false;
+  lightboxDragStart = null;
+}
+
+function lightboxNav(dir) {
+  closeLightbox();
+  openLightbox(lightboxIndex + dir);
+}
+function lightboxZoomIn() { lightboxZoom = Math.min(8, lightboxZoom * 1.2); updateLightboxTransform(); }
+function lightboxZoomOut() { lightboxZoom = Math.max(1, lightboxZoom / 1.2); updateLightboxTransform(); }
+function lightboxWheel(e) {
+  e.preventDefault();
+  if (e.deltaY < 0) lightboxZoomIn(); else lightboxZoomOut();
+}
+function lightboxMouseDown(e) {
+  if (e.button !== 0) return;
+  lightboxDragging = true;
+  lightboxDragStart = { x: e.clientX - lightboxOffset.x, y: e.clientY - lightboxOffset.y };
+}
+function lightboxMouseMove(e) {
+  if (!lightboxDragging || !lightboxDragStart) return;
+  lightboxOffset = { x: e.clientX - lightboxDragStart.x, y: e.clientY - lightboxDragStart.y };
+  updateLightboxTransform();
+}
+function lightboxMouseUp() { lightboxDragging = false; lightboxDragStart = null; }
+function updateLightboxTransform() {
+  const img = document.getElementById('lightboxImg');
+  if (img) img.style.transform = `translate(${lightboxOffset.x}px,${lightboxOffset.y}px) scale(${lightboxZoom})`;
+}
+
+// ===========================
+// OVERVIEW PAGE
+// ===========================
+async function loadOverviewPage() {
+  const container = document.getElementById('page-overview');
+  container.innerHTML = '<div class="text-muted">Loading overview...</div>';
+  try {
+    allEntries = await api('getJudgedEntriesOverview');
+    renderOverview();
+  } catch (e) {
+    container.innerHTML = `<div class="text-error">Failed: ${esc(e.message)}</div>`;
+  }
+}
+
+function renderOverview() {
+  const container = document.getElementById('page-overview');
+  const entries = allEntries;
+
+  // Simple filters using data attributes
+  container.innerHTML = `
+    <h1 style="font-size:20px;font-weight:700;margin-bottom:12px">Judgement Overview</h1>
+    <div class="filter-bar">
+      <div class="filter-group"><label>Selection:</label>
+        <select id="ovFilterSel" onchange="renderOverviewTable()">
+          <option value="all">All</option><option value="selected">Selected</option><option value="unselected">Not Selected</option>
+        </select></div>
+      <div class="filter-group"><label>Type:</label>
+        <select id="ovFilterType" onchange="renderOverviewTable()">
+          <option value="all">All</option><option value="bonsai">Bonsai</option><option value="kifu">Kifu</option><option value="shohin">Shohin</option>
+        </select></div>
+      <div class="filter-group"><label>Sort:</label>
+        <select id="ovSort" onchange="renderOverviewTable()">
+          <option value="yes">Most Yes</option><option value="no">Most No</option><option value="name">Name</option><option value="owner">Owner</option><option value="treeID">Tree ID</option>
+        </select></div>
+    </div>
+    <div class="stats-bar" id="ovStats"></div>
+    <div id="ovTable"></div>`;
+  renderOverviewTable();
+}
+
+function renderOverviewTable() {
+  const selFilter = document.getElementById('ovFilterSel').value;
+  const typeFilter = document.getElementById('ovFilterType').value;
+  const sortBy = document.getElementById('ovSort').value;
+
+  let filtered = allEntries.filter(e => {
+    if (selFilter === 'selected' && !e.selected) return false;
+    if (selFilter === 'unselected' && e.selected) return false;
+    if (typeFilter !== 'all' && e.entryType !== typeFilter) return false;
+    return true;
+  });
+
+  filtered.sort((a, b) => {
+    switch (sortBy) {
+      case 'name': return (a.entryName || '').localeCompare(b.entryName || '');
+      case 'owner': return (a.owner || '').localeCompare(b.owner || '');
+      case 'yes': return (b.judgementSummary?.yes || 0) - (a.judgementSummary?.yes || 0);
+      case 'no': return (b.judgementSummary?.no || 0) - (a.judgementSummary?.no || 0);
+      case 'treeID': return (a.treeID || '').replace(/^(BONSAI|KIFU|SHOHIN)[_\s]*/i, '').localeCompare(
+        (b.treeID || '').replace(/^(BONSAI|KIFU|SHOHIN)[_\s]*/i, ''), undefined, { numeric: true });
+      default: return 0;
+    }
+  });
+
+  // Stats
+  const selected = filtered.filter(e => e.selected).length;
+  const totalJ = filtered.reduce((s, e) => s + (e.judgementSummary?.total || 0), 0);
+  const with3Yes = filtered.filter(e => (e.judgementSummary?.yes || 0) >= 3);
+  const w3 = with3Yes.reduce((s, e) => s + parseFloat(e.width || 0), 0);
+  const with2Yes = filtered.filter(e => (e.judgementSummary?.yes || 0) === 2);
+  const w2 = with2Yes.reduce((s, e) => s + parseFloat(e.width || 0), 0);
+
+  document.getElementById('ovStats').innerHTML = `
+    <div class="stat-box"><strong>Total:</strong> ${filtered.length}</div>
+    <div class="stat-box green"><strong>Selected:</strong> ${selected}</div>
+    <div class="stat-box blue"><strong>Judgements:</strong> ${totalJ}</div>
+    <div class="stat-box purple"><strong>3+ Yes:</strong> ${with3Yes.length} entries, ${w3.toFixed(0)} cm</div>
+    <div class="stat-box amber"><strong>2 Yes:</strong> ${with2Yes.length} entries, ${w2.toFixed(0)} cm</div>`;
+
+  if (filtered.length === 0) {
+    document.getElementById('ovTable').innerHTML = '<div class="text-center text-muted mt-4">No entries match filters.</div>';
+    return;
+  }
+
+  const typeColors = { bonsai: 'badge-blue', kifu: 'badge-purple', shohin: 'badge-teal' };
+  const typeLabels = { bonsai: 'Bonsai', kifu: 'Kifu', shohin: 'Shohin' };
+
+  document.getElementById('ovTable').innerHTML = `
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr>
+        <th>Entry</th><th>Type</th><th>Owner</th><th class="text-center">Width</th>
+        <th class="text-center">Judgements</th><th class="text-center">Selected</th><th class="text-center">Actions</th>
+      </tr></thead>
+      <tbody>${filtered.map(e => {
+        const s = e.judgementSummary || {};
+        const shortId = (e.treeID || '').replace(/^(BONSAI|KIFU|SHOHIN)[_\s]*/i, '');
+        return `<tr class="${e.selected ? 'selected-row' : ''}">
+          <td><div style="font-weight:500">${esc(e.entryName || '')}</div><div class="text-xs text-muted">${esc(shortId)}</div></td>
+          <td><span class="badge ${typeColors[e.entryType] || 'badge-gray'}">${typeLabels[e.entryType] || e.entryType}</span></td>
+          <td>${esc(e.owner || '')}</td>
+          <td class="text-center">${esc(e.width || '')}</td>
+          <td class="text-center"><div class="judgement-votes">
+            <span class="vote-badge yes">✓ ${s.yes || 0}</span>
+            <span class="vote-badge maybe">? ${s.maybe || 0}</span>
+            <span class="vote-badge no">✗ ${s.no || 0}</span>
+          </div><div class="text-xs text-muted">${s.total || 0} total</div></td>
+          <td class="text-center">
+            <button class="btn btn-sm ${e.selected ? 'btn-green' : 'btn-outline'}" onclick="toggleEntrySelected('${e.entryType}',${e.entryId},${!e.selected})">
+              ${e.selected ? '✓ Selected' : 'Select'}
+            </button></td>
+          <td class="text-center">
+            <button class="btn btn-outline btn-sm" onclick="toggleOverviewDetail('${e.entryType}-${e.entryId}')">Details</button>
+          </td>
+        </tr>
+        <tr id="detail-${e.entryType}-${e.entryId}" class="hidden"><td colspan="7" style="background:#f9fafb;padding:12px">
+          ${e.judgements && e.judgements.length > 0 ? e.judgements.map(j => {
+            const dLabel = j.decision === 1 ? 'Yes' : j.decision === -1 ? 'No' : 'Maybe';
+            const dCls = j.decision === 1 ? 'badge-green' : j.decision === -1 ? 'badge-red' : 'badge-yellow';
+            return `<div style="margin-bottom:4px"><span class="badge ${dCls}">${dLabel}</span> <strong>${esc(j.jurorName || '')}</strong>
+              ${j.comments ? ` — ${esc(j.comments)}` : ''} <span class="text-xs text-muted">${j.judgementDate || ''}</span></div>`;
+          }).join('') : '<div class="text-muted">No judgements</div>'}
+        </td></tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+}
+
+function toggleOverviewDetail(key) {
+  const row = document.getElementById('detail-' + key);
+  if (row) row.classList.toggle('hidden');
+}
+
+async function toggleEntrySelected(type, id, selected) {
+  try {
+    await api('updateEntrySelected', type, id, selected);
+    // Update local data
+    const entry = allEntries.find(e => e.entryType === type && e.entryId === id);
+    if (entry) entry.selected = selected;
+    renderOverviewTable();
+  } catch (e) {
+    alert('Failed: ' + e.message);
+  }
+}
+
+// ===========================
+// GRID PAGE (Editable)
+// ===========================
+let gridData = [];
+let gridSearchTerm = '';
+
+async function loadGridPage() {
+  const container = document.getElementById('page-grid');
+  const typeLabel = reviewType.charAt(0).toUpperCase() + reviewType.slice(1);
+  container.innerHTML = `<div class="text-muted">Loading ${typeLabel} grid...</div>`;
+  try {
+    registrations = await api('getUserRegistrations', false);
+    buildGridData();
+    renderGrid();
+  } catch (e) {
+    container.innerHTML = `<div class="text-error">Failed: ${esc(e.message)}</div>`;
+  }
+}
+
+function buildGridData() {
+  gridData = [];
+  for (const reg of registrations) {
+    if (reviewType === 'bonsai' && reg.bonsaiTree) {
+      gridData.push({ ...reg.bonsaiTree, firstName: reg.firstName, lastName: reg.lastName,
+        membershipNumber: reg.membershipNumber, regId: reg.id, contestantId: reg.contestantId });
+    }
+    if (reviewType === 'kifu' && reg.kifuTree) {
+      const k = reg.kifuTree;
+      gridData.push({ ...k, firstName: reg.firstName, lastName: reg.lastName,
+        membershipNumber: reg.membershipNumber, regId: reg.id, contestantId: reg.contestantId });
+    }
+    if (reviewType === 'shohin' && reg.shohinComposition) {
+      gridData.push({ ...reg.shohinComposition, firstName: reg.firstName, lastName: reg.lastName,
+        membershipNumber: reg.membershipNumber, regId: reg.id, contestantId: reg.contestantId });
+    }
+  }
+}
+
+function renderGrid() {
+  const container = document.getElementById('page-grid');
+  const typeLabel = reviewType.charAt(0).toUpperCase() + reviewType.slice(1);
+  const filtered = gridSearchTerm
+    ? gridData.filter(r => JSON.stringify(r).toLowerCase().includes(gridSearchTerm.toLowerCase()))
+    : gridData;
+
+  let cols, rows;
+  if (reviewType === 'bonsai') {
+    cols = ['ID', 'Tree', 'First Name', 'Last Name', 'BAB #', 'Style', 'Pot Origin', 'Pot Info', 'Width', 'Selected', 'OoC'];
+    rows = filtered.map((r, i) => `<tr>
+      <td>${esc(r.treeID || '')}</td>
+      <td><input value="${esc(r.tree || '')}" onblur="gridEdit(${i},'tree',this.value)"></td>
+      <td><input value="${esc(r.firstName || '')}" onblur="gridEdit(${i},'firstName',this.value)"></td>
+      <td><input value="${esc(r.lastName || '')}" onblur="gridEdit(${i},'lastName',this.value)"></td>
+      <td><input value="${esc(r.membershipNumber || '')}" onblur="gridEdit(${i},'membershipNumber',this.value)"></td>
+      <td><input value="${esc(r.style || '')}" onblur="gridEdit(${i},'style',this.value)"></td>
+      <td><input value="${esc(r.potOrigin || '')}" onblur="gridEdit(${i},'potOrigin',this.value)"></td>
+      <td><input value="${esc(r.potInformation || '')}" onblur="gridEdit(${i},'potInformation',this.value)"></td>
+      <td><input value="${esc(r.totalWidth || '')}" onblur="gridEdit(${i},'totalWidth',this.value)" style="width:60px"></td>
+      <td class="text-center"><input type="checkbox" ${r.selected ? 'checked' : ''} onchange="gridToggle(${i},'selected',this.checked)"></td>
+      <td class="text-center"><input type="checkbox" ${r.outOfCompetition ? 'checked' : ''} onchange="gridToggle(${i},'outOfCompetition',this.checked)"></td>
+    </tr>`).join('');
+  } else if (reviewType === 'kifu') {
+    cols = ['ID', 'Kifu 1', 'Kifu 2', 'First', 'Last', 'BAB #', 'Style 1', 'Style 2', 'Width', 'Sel', 'OoC'];
+    rows = filtered.map((r, i) => `<tr>
+      <td>${esc(r.kifuID || r.treeID || '')}</td>
+      <td><input value="${esc(r.kifu || '')}" onblur="gridEdit(${i},'kifu',this.value)"></td>
+      <td><input value="${esc(r.kifu2 || '')}" onblur="gridEdit(${i},'kifu2',this.value)"></td>
+      <td><input value="${esc(r.firstName || '')}" onblur="gridEdit(${i},'firstName',this.value)"></td>
+      <td><input value="${esc(r.lastName || '')}" onblur="gridEdit(${i},'lastName',this.value)"></td>
+      <td><input value="${esc(r.membershipNumber || '')}" onblur="gridEdit(${i},'membershipNumber',this.value)"></td>
+      <td><input value="${esc(r.style || '')}" onblur="gridEdit(${i},'style',this.value)"></td>
+      <td><input value="${esc(r.style2 || '')}" onblur="gridEdit(${i},'style2',this.value)"></td>
+      <td><input value="${esc(r.totalWidth || '')}" onblur="gridEdit(${i},'totalWidth',this.value)" style="width:60px"></td>
+      <td class="text-center"><input type="checkbox" ${r.selected ? 'checked' : ''} onchange="gridToggle(${i},'selected',this.checked)"></td>
+      <td class="text-center"><input type="checkbox" ${r.outOfCompetition ? 'checked' : ''} onchange="gridToggle(${i},'outOfCompetition',this.checked)"></td>
+    </tr>`).join('');
+  } else {
+    cols = ['ID', 'Top Tree', 'Lower 1', 'Lower 2', 'Lower 3', 'First', 'Last', 'BAB #', 'Width', 'Sel', 'OoC'];
+    rows = filtered.map((r, i) => `<tr>
+      <td>${esc(r.treeID || '')}</td>
+      <td><input value="${esc(r.topTree || '')}" onblur="gridEdit(${i},'topTree',this.value)"></td>
+      <td><input value="${esc(r.lowerTree1 || '')}" onblur="gridEdit(${i},'lowerTree1',this.value)"></td>
+      <td><input value="${esc(r.lowerTree2 || '')}" onblur="gridEdit(${i},'lowerTree2',this.value)"></td>
+      <td><input value="${esc(r.lowerTree3 || '')}" onblur="gridEdit(${i},'lowerTree3',this.value)"></td>
+      <td><input value="${esc(r.firstName || '')}" onblur="gridEdit(${i},'firstName',this.value)"></td>
+      <td><input value="${esc(r.lastName || '')}" onblur="gridEdit(${i},'lastName',this.value)"></td>
+      <td><input value="${esc(r.membershipNumber || '')}" onblur="gridEdit(${i},'membershipNumber',this.value)"></td>
+      <td><input value="${esc(r.totalWidth || r.width || '')}" onblur="gridEdit(${i},'width',this.value)" style="width:60px"></td>
+      <td class="text-center"><input type="checkbox" ${r.selected ? 'checked' : ''} onchange="gridToggle(${i},'selected',this.checked)"></td>
+      <td class="text-center"><input type="checkbox" ${r.outOfCompetition ? 'checked' : ''} onchange="gridToggle(${i},'outOfCompetition',this.checked)"></td>
+    </tr>`).join('');
+  }
+
+  container.innerHTML = `
+    <h1 style="font-size:20px;font-weight:700;margin-bottom:12px">${typeLabel} Grid</h1>
+    <div class="grid-search"><input placeholder="Search..." value="${esc(gridSearchTerm)}" oninput="gridSearchTerm=this.value;renderGrid()"></div>
+    <div class="editable-grid">
+      <table><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead>
+      <tbody>${rows}</tbody></table>
+    </div>`;
+}
+
+async function gridEdit(idx, field, value) {
+  const item = gridData[idx];
+  if (!item || item[field] === value) return;
+  item[field] = value;
+  // Build full registration update
+  const reg = registrations.find(r => r.id === item.regId);
+  if (!reg) return;
+  try {
+    await api('updateCompleteRegistration', reg);
+  } catch (e) {
+    console.error('Grid save failed:', e);
+  }
+}
+
+async function gridToggle(idx, field, checked) {
+  const item = gridData[idx];
+  if (!item) return;
+  item[field] = checked;
+  if (field === 'selected') {
+    const type = reviewType;
+    try { await api('updateEntrySelected', type, item.id, checked); } catch (e) { alert('Failed: ' + e.message); }
+  } else {
+    const reg = registrations.find(r => r.id === item.regId);
+    if (reg) {
+      try { await api('updateCompleteRegistration', reg); } catch (e) { console.error('Failed:', e); }
+    }
+  }
+}
+
+// ===========================
+// ADMIN PAGE
+// ===========================
+let adminJurors = [];
+let adminRoles = [];
+
+async function loadAdminPage() {
+  const container = document.getElementById('page-admin');
+  container.innerHTML = '<div class="text-muted">Loading admin...</div>';
+  try {
+    [adminJurors, adminRoles] = await Promise.all([api('getAllJurors'), api('getRoles')]);
+    renderAdminPage();
+  } catch (e) {
+    container.innerHTML = `<div class="text-error">Failed: ${esc(e.message)}</div>`;
+  }
+}
+
+function renderAdminPage() {
+  const container = document.getElementById('page-admin');
+  container.innerHTML = `
+    <h1 style="font-size:20px;font-weight:700;margin-bottom:12px">Admin — Juror Management</h1>
+    <button class="btn btn-green mb-4" onclick="toggleCreateJurorForm()">Create New Juror</button>
+    <div id="createJurorForm" class="admin-form hidden">
+      <h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Create New Juror</h2>
+      <div class="form-grid">
+        <div><label>Name</label><input id="newJurorName" class="w-full" required></div>
+        <div><label>Email</label><input id="newJurorEmail" type="email" class="w-full" required></div>
+        <div><label>Password</label><input id="newJurorPassword" type="password" class="w-full" required></div>
+        <div><label>Role</label><select id="newJurorRole" class="w-full">
+          ${adminRoles.map(r => `<option value="${esc(r.name)}">${esc(r.displayName)}</option>`).join('')}
+        </select></div>
+      </div>
+      <button class="btn btn-blue mt-4" onclick="createNewJuror()">Create</button>
+    </div>
+    <div class="card">
+      <h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Current Jurors</h2>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Change Role</th></tr></thead>
+          <tbody>${adminJurors.map(j => `<tr>
+            <td style="font-weight:500">${esc(j.name)}${j.id === currentUser.id ? ' <span class="text-xs" style="color:#2563eb">(You)</span>' : ''}</td>
+            <td class="text-muted">${esc(j.email)}</td>
+            <td><span class="badge ${j.role === 'ADMIN' ? 'badge-red' : j.role === 'MODERATOR' ? 'badge-yellow' : 'badge-green'}">${esc(j.roleDisplay || j.role)}</span></td>
+            <td><select onchange="updateRole(${j.id},this.value)" ${j.id === currentUser.id ? 'disabled' : ''}>
+              ${adminRoles.map(r => `<option value="${esc(r.name)}" ${j.role === r.name ? 'selected' : ''}>${esc(r.displayName)}</option>`).join('')}
+            </select></td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function toggleCreateJurorForm() {
+  document.getElementById('createJurorForm').classList.toggle('hidden');
+}
+
+async function createNewJuror() {
+  const name = document.getElementById('newJurorName').value.trim();
+  const email = document.getElementById('newJurorEmail').value.trim();
+  const password = document.getElementById('newJurorPassword').value;
+  const role = document.getElementById('newJurorRole').value;
+  if (!name || !email || !password) { alert('All fields required'); return; }
+  try {
+    await api('createJuror', name, email, password, role);
+    adminJurors = await api('getAllJurors');
+    renderAdminPage();
+  } catch (e) {
+    alert('Failed: ' + e.message);
+  }
+}
+
+async function updateRole(jurorId, role) {
+  try {
+    await api('updateJurorRole', jurorId, role);
+    adminJurors = await api('getAllJurors');
+    renderAdminPage();
+  } catch (e) {
+    alert('Failed: ' + e.message);
+  }
+}
+
+// ===========================
+// ENTRIES EDIT PAGE
+// ===========================
+async function loadEntriesPage() {
+  const container = document.getElementById('page-entries');
+  container.innerHTML = '<div class="text-muted">Loading entries...</div>';
+  try {
+    registrations = await api('getUserRegistrations', false);
+    renderEntriesPage();
+  } catch (e) {
+    container.innerHTML = `<div class="text-error">Failed: ${esc(e.message)}</div>`;
+  }
+}
+
+function renderEntriesPage() {
+  const container = document.getElementById('page-entries');
+  container.innerHTML = `
+    <h1 style="font-size:20px;font-weight:700;margin-bottom:12px">Edit Entries</h1>
+    <div class="grid-search mb-4"><input id="entrySearch" placeholder="Search registrations..." oninput="filterEntries(this.value)"></div>
+    <div id="entriesList"></div>`;
+  filterEntries('');
+}
+
+function filterEntries(term) {
+  const container = document.getElementById('entriesList');
+  const filtered = term
+    ? registrations.filter(r => JSON.stringify(r).toLowerCase().includes(term.toLowerCase()))
+    : registrations;
+
+  container.innerHTML = filtered.map(reg => {
+    let entryHtml = '';
+    if (reg.bonsaiTree) {
+      const t = reg.bonsaiTree;
+      entryHtml += `<div class="card mt-2"><div class="badge badge-blue mb-2">Bonsai: ${esc(t.treeID || '')}</div>
+        <div class="form-grid">
+          <div><label>Tree</label><input value="${esc(t.tree || '')}" data-reg="${reg.id}" data-type="bonsai" data-field="tree" onblur="saveEntryField(this)"></div>
+          <div><label>Style</label><input value="${esc(t.style || '')}" data-reg="${reg.id}" data-type="bonsai" data-field="style" onblur="saveEntryField(this)"></div>
+          <div><label>Pot Origin</label><input value="${esc(t.potOrigin || '')}" data-reg="${reg.id}" data-type="bonsai" data-field="potOrigin" onblur="saveEntryField(this)"></div>
+          <div><label>Pot Info</label><input value="${esc(t.potInformation || '')}" data-reg="${reg.id}" data-type="bonsai" data-field="potInformation" onblur="saveEntryField(this)"></div>
+        </div></div>`;
+    }
+    if (reg.kifuTree) {
+      const k = reg.kifuTree;
+      entryHtml += `<div class="card mt-2"><div class="badge badge-purple mb-2">Kifu: ${esc(k.kifuID || k.treeID || '')}</div>
+        <div class="form-grid">
+          <div><label>Kifu 1</label><input value="${esc(k.kifu || '')}" data-reg="${reg.id}" data-type="kifu" data-field="kifu" onblur="saveEntryField(this)"></div>
+          <div><label>Kifu 2</label><input value="${esc(k.kifu2 || '')}" data-reg="${reg.id}" data-type="kifu" data-field="kifu2" onblur="saveEntryField(this)"></div>
+          <div><label>Style 1</label><input value="${esc(k.style || '')}" data-reg="${reg.id}" data-type="kifu" data-field="style" onblur="saveEntryField(this)"></div>
+          <div><label>Style 2</label><input value="${esc(k.style2 || '')}" data-reg="${reg.id}" data-type="kifu" data-field="style2" onblur="saveEntryField(this)"></div>
+        </div></div>`;
+    }
+    if (reg.shohinComposition) {
+      const s = reg.shohinComposition;
+      entryHtml += `<div class="card mt-2"><div class="badge badge-teal mb-2">Shohin: ${esc(s.treeID || '')}</div>
+        <div class="form-grid">
+          <div><label>Top Tree</label><input value="${esc(s.topTree || '')}" data-reg="${reg.id}" data-type="shohin" data-field="topTree" onblur="saveEntryField(this)"></div>
+          <div><label>Width</label><input value="${esc(s.width || '')}" data-reg="${reg.id}" data-type="shohin" data-field="width" onblur="saveEntryField(this)"></div>
+        </div></div>`;
+    }
+    return `<div class="card mb-4">
+      <div style="font-weight:600;font-size:15px">${esc(reg.firstName || '')} ${esc(reg.lastName || '')} <span class="text-muted text-sm">(${esc(reg.registrationId || 'T-' + reg.id)})</span></div>
+      <div class="text-sm text-muted">${esc(reg.email || '')} — ${esc(reg.country || '')} — BAB# ${esc(reg.membershipNumber || '')}</div>
+      ${entryHtml}
+    </div>`;
+  }).join('');
+}
+
+async function saveEntryField(input) {
+  const regId = parseInt(input.dataset.reg);
+  const type = input.dataset.type;
+  const field = input.dataset.field;
+  const value = input.value;
+  const reg = registrations.find(r => r.id === regId);
+  if (!reg) return;
+  if (type === 'bonsai' && reg.bonsaiTree) reg.bonsaiTree[field] = value;
+  if (type === 'kifu' && reg.kifuTree) reg.kifuTree[field] = value;
+  if (type === 'shohin' && reg.shohinComposition) reg.shohinComposition[field] = value;
+  try { await api('updateCompleteRegistration', reg); } catch (e) { console.error('Save failed:', e); }
+}
+
+// ===========================
+// EXHIBITION PLACEMENT PAGE
+// ===========================
+async function loadPlacementPage() {
+  const container = document.getElementById('page-placement');
+  container.innerHTML = '<div class="text-muted">Loading placement...</div>';
+  try {
+    const entries = await api('getBonsaiTreesSelected');
+    renderPlacementPage(entries);
+  } catch (e) {
+    container.innerHTML = `<div class="text-error">Failed: ${esc(e.message)}</div>`;
+  }
+}
+
+function renderPlacementPage(entries) {
+  const container = document.getElementById('page-placement');
+  container.innerHTML = `
+    <h1 style="font-size:20px;font-weight:700;margin-bottom:12px">Exhibition Placement</h1>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Type</th><th>Tree ID</th><th>Entry</th><th>Owner</th><th>Width</th><th>Placement</th></tr></thead>
+        <tbody>${entries.map(e => `<tr>
+          <td><span class="badge ${e.type === 'Bonsai' ? 'badge-blue' : e.type === 'Kifu' ? 'badge-purple' : 'badge-teal'}">${esc(e.type)}</span></td>
+          <td class="text-sm">${esc(e.treeId || '')}</td>
+          <td>${esc(e.representation || '')}</td>
+          <td>${esc(e.firstName || '')} ${esc(e.lastName || '')}</td>
+          <td>${esc(e.totalWidth || '')}</td>
+          <td><input value="${esc(e.placement || '')}" style="width:80px" data-type="${esc(e.type?.toLowerCase() || '')}" data-id="${e.id}" onblur="savePlacement(this)"></td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+async function savePlacement(input) {
+  // Placement saved via updateCompleteRegistration - would need an updateExhPlace function
+  // For now, log it
+  console.log('Placement update:', input.dataset.type, input.dataset.id, input.value);
+}
+
+// ===========================
+// UTILITIES
+// ===========================
+function esc(str) {
+  if (str === null || str === undefined) return '';
+  const div = document.createElement('div');
+  div.textContent = String(str);
+  return div.innerHTML;
+}
+
+// ===========================
+// INIT
+// ===========================
+document.addEventListener('DOMContentLoaded', () => {
+  checkSession();
+  // Allow Enter key on login form
+  document.getElementById('loginPassword').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') doLogin();
+  });
+  document.getElementById('loginEmail').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('loginPassword').focus();
+  });
+});
+</script>
+</body>
+</html>
