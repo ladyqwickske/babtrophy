@@ -1163,6 +1163,15 @@ function renderAdminPage() {
       </div>
       <button class="btn btn-blue mt-4" onclick="createNewJuror()">Add Juror</button>
     </div>
+    <div class="card mb-4">
+      <h2 style="font-size:16px;font-weight:600;margin-bottom:12px">CSV Import</h2>
+      <p class="text-muted mb-2">Import registrations from a Trophy CSV export file. Only new entries (after the last imported date) will be added.</p>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <input type="file" id="csvFileInput" accept=".csv" style="flex:1;min-width:200px">
+        <button class="btn btn-blue" onclick="importCsvFile()">Import CSV</button>
+      </div>
+      <div id="csvImportStatus" class="mt-2" style="display:none"></div>
+    </div>
     <div class="card">
       <h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Current Jurors</h2>
       <div style="overflow-x:auto">
@@ -1218,6 +1227,28 @@ async function updateRole(jurorId, role) {
     renderAdminPage();
   } catch (e) {
     alert('Failed: ' + e.message);
+  }
+}
+
+async function importCsvFile() {
+  const fileInput = document.getElementById('csvFileInput');
+  const statusEl = document.getElementById('csvImportStatus');
+  if (!fileInput.files || !fileInput.files[0]) { alert('Please select a CSV file'); return; }
+  const file = fileInput.files[0];
+  statusEl.style.display = 'block';
+  statusEl.innerHTML = '<span style="color:#2563eb">Reading file...</span>';
+  try {
+    const csvData = await file.text();
+    statusEl.innerHTML = '<span style="color:#2563eb">Importing... this may take a minute for large files.</span>';
+    const result = await api('importFromCsv', csvData);
+    if (result.success) {
+      statusEl.innerHTML = `<span style="color:#059669"><strong>Done!</strong> Imported: ${result.imported}, Skipped: ${result.skipped}</span>` +
+        (result.errors && result.errors.length ? `<br><span style="color:#dc2626;font-size:12px">Errors: ${result.errors.join('; ')}</span>` : '');
+    } else {
+      statusEl.innerHTML = `<span style="color:#dc2626">Import failed: ${esc(result.error)}</span>`;
+    }
+  } catch (e) {
+    statusEl.innerHTML = `<span style="color:#dc2626">Error: ${esc(e.message)}</span>`;
   }
 }
 
