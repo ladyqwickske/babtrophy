@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BAB Trophy 2026</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 /* ===== Reset & Base ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -152,16 +153,10 @@ tr:hover{background:#f9fafb}
 <div id="loginScreen" class="login-wrap">
   <div class="login-card">
     <h1>BAB Trophy 2026</h1>
-    <div>
-      <label style="display:block;font-weight:600;margin-bottom:6px">Email</label>
-      <input id="loginEmail" type="email" class="w-full" required>
-    </div>
-    <div style="margin-top:16px">
-      <label style="display:block;font-weight:600;margin-bottom:6px">Password</label>
-      <input id="loginPassword" type="password" class="w-full" required>
-    </div>
+    <p class="text-muted text-center mb-4">Sign in with your Google account</p>
+    <div id="googleBtnWrap" style="display:flex;justify-content:center"></div>
     <div id="loginError" class="text-error mt-2 hidden"></div>
-    <button id="loginBtn" class="btn btn-blue w-full mt-4" onclick="doLogin()">Login</button>
+    <div id="loginSpinner" class="text-center mt-4 hidden"><span class="spinner"></span> Verifying...</div>
   </div>
 </div>
 
@@ -183,6 +178,8 @@ tr:hover{background:#f9fafb}
 // ===== Configuration =====
 window.CLOUDFLARE_WORKER_URL = 'https://babtrophy.lady-qwickske.workers.dev/';
 window.GAS_WEB_APP_URL = window.CLOUDFLARE_WORKER_URL;
+// Google OAuth Client ID — create at console.cloud.google.com > Credentials > OAuth 2.0 Client IDs
+window.GOOGLE_CLIENT_ID = '137313908077-j18hmksh7ot69vipujvcdc2p09gpm7qp.apps.googleusercontent.com';
 </script>
 <script>
 // ===========================
@@ -229,58 +226,95 @@ async function api(fn, ...args) {
 }
 
 // ===========================
-// AUTH
+// AUTH (Google Sign-In)
 // ===========================
-async function doLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
+
+/** Called by Google Identity Services after user signs in */
+window.onGoogleSignIn = async function(response) {
+  const idToken = response.credential;
   const errEl = document.getElementById('loginError');
-  const btn = document.getElementById('loginBtn');
+  const spinner = document.getElementById('loginSpinner');
   errEl.classList.add('hidden');
-  btn.disabled = true;
-  btn.textContent = 'Logging in...';
+  spinner.classList.remove('hidden');
+
   try {
-    const result = await api('jurorLogin', email, password);
-    if (result && result.success) {
-      authToken = result.token;
-      localStorage.setItem('bab_auth_token', authToken);
-      currentUser = result;
-      showApp();
-    } else {
-      errEl.textContent = 'Invalid credentials.';
-      errEl.classList.remove('hidden');
+    // Step 1: Verify Google token via Cloudflare Worker
+    const verifyRes = await fetch(window.CLOUDFLARE_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken })
+    });
+    const verifyData = await verifyRes.json();
+    if (!verifyData.success || !verifyData.email) {
+      throw new Error('Google token verification failed');
     }
+    const email = verifyData.email;
+
+    // Step 2: Check permissions via GAS backend (Jurors sheet lookup)
+    const permResult = await api('verifyGoogleLogin', email);
+    if (!permResult || !permResult.success || !permResult.allowed) {
+      errEl.textContent = 'Access denied. Your Google account (' + email + ') is not authorized. Contact an admin.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+
+    // Step 3: Store session and enter app
+    currentUser = permResult;
+    localStorage.setItem('bab_auth_email', email);
+    localStorage.setItem('bab_auth_token', idToken);
+    authToken = idToken;
+    showApp();
   } catch (e) {
     errEl.textContent = 'Login failed: ' + e.message;
     errEl.classList.remove('hidden');
   } finally {
-    btn.disabled = false;
-    btn.textContent = 'Login';
+    spinner.classList.add('hidden');
   }
-}
+};
 
 function doLogout() {
   currentUser = null;
   authToken = null;
   localStorage.removeItem('bab_auth_token');
+  localStorage.removeItem('bab_auth_email');
+  google.accounts.id.disableAutoSelect();
   document.getElementById('mainApp').classList.add('hidden');
   document.getElementById('loginScreen').classList.remove('hidden');
-  document.getElementById('loginPassword').value = '';
 }
 
 async function checkSession() {
-  const token = localStorage.getItem('bab_auth_token');
-  if (!token) return;
+  const email = localStorage.getItem('bab_auth_email');
+  if (!email) return;
   try {
-    const result = await api('verifySession', token);
-    if (result && result.success) {
+    const result = await api('verifyGoogleLogin', email);
+    if (result && result.success && result.allowed) {
       currentUser = result;
-      authToken = token;
+      authToken = localStorage.getItem('bab_auth_token');
       showApp();
+    } else {
+      localStorage.removeItem('bab_auth_email');
+      localStorage.removeItem('bab_auth_token');
     }
   } catch (e) {
+    localStorage.removeItem('bab_auth_email');
     localStorage.removeItem('bab_auth_token');
   }
+}
+
+function initGoogleSignIn() {
+  if (typeof google === 'undefined' || !google.accounts) {
+    // GIS library not loaded yet, retry
+    setTimeout(initGoogleSignIn, 200);
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: window.GOOGLE_CLIENT_ID,
+    callback: window.onGoogleSignIn
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('googleBtnWrap'),
+    { theme: 'outline', size: 'large', width: 300, text: 'signin_with' }
+  );
 }
 
 // ===========================
@@ -1116,31 +1150,32 @@ function renderAdminPage() {
   const container = document.getElementById('page-admin');
   container.innerHTML = `
     <h1 style="font-size:20px;font-weight:700;margin-bottom:12px">Admin — Juror Management</h1>
-    <button class="btn btn-green mb-4" onclick="toggleCreateJurorForm()">Create New Juror</button>
+    <p class="text-muted mb-4">Add Google accounts and assign roles. Users sign in with their Google account — no passwords needed.</p>
+    <button class="btn btn-green mb-4" onclick="toggleCreateJurorForm()">Add New Juror</button>
     <div id="createJurorForm" class="admin-form hidden">
-      <h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Create New Juror</h2>
+      <h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Add New Juror</h2>
       <div class="form-grid">
-        <div><label>Name</label><input id="newJurorName" class="w-full" required></div>
-        <div><label>Email</label><input id="newJurorEmail" type="email" class="w-full" required></div>
-        <div><label>Password</label><input id="newJurorPassword" type="password" class="w-full" required></div>
+        <div><label>Name</label><input id="newJurorName" class="w-full" placeholder="Display name" required></div>
+        <div><label>Google Email</label><input id="newJurorEmail" type="email" class="w-full" placeholder="user@gmail.com" required></div>
         <div><label>Role</label><select id="newJurorRole" class="w-full">
           ${adminRoles.map(r => `<option value="${esc(r.name)}">${esc(r.displayName)}</option>`).join('')}
         </select></div>
       </div>
-      <button class="btn btn-blue mt-4" onclick="createNewJuror()">Create</button>
+      <button class="btn btn-blue mt-4" onclick="createNewJuror()">Add Juror</button>
     </div>
     <div class="card">
       <h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Current Jurors</h2>
       <div style="overflow-x:auto">
         <table>
-          <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Change Role</th></tr></thead>
+          <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Change Role</th><th></th></tr></thead>
           <tbody>${adminJurors.map(j => `<tr>
-            <td style="font-weight:500">${esc(j.name)}${j.id === currentUser.id ? ' <span class="text-xs" style="color:#2563eb">(You)</span>' : ''}</td>
+            <td style="font-weight:500">${esc(j.name)}${j.email === currentUser.email ? ' <span class="text-xs" style="color:#2563eb">(You)</span>' : ''}</td>
             <td class="text-muted">${esc(j.email)}</td>
             <td><span class="badge ${j.role === 'ADMIN' ? 'badge-red' : j.role === 'MODERATOR' ? 'badge-yellow' : 'badge-green'}">${esc(j.roleDisplay || j.role)}</span></td>
-            <td><select onchange="updateRole(${j.id},this.value)" ${j.id === currentUser.id ? 'disabled' : ''}>
+            <td><select onchange="updateRole(${j.id},this.value)" ${j.email === currentUser.email ? 'disabled' : ''}>
               ${adminRoles.map(r => `<option value="${esc(r.name)}" ${j.role === r.name ? 'selected' : ''}>${esc(r.displayName)}</option>`).join('')}
             </select></td>
+            <td>${j.email !== currentUser.email ? `<button class="btn btn-red btn-sm" onclick="deleteJuror(${j.id},'${esc(j.name)}')">Remove</button>` : ''}</td>
           </tr>`).join('')}</tbody>
         </table>
       </div>
@@ -1154,11 +1189,21 @@ function toggleCreateJurorForm() {
 async function createNewJuror() {
   const name = document.getElementById('newJurorName').value.trim();
   const email = document.getElementById('newJurorEmail').value.trim();
-  const password = document.getElementById('newJurorPassword').value;
   const role = document.getElementById('newJurorRole').value;
-  if (!name || !email || !password) { alert('All fields required'); return; }
+  if (!name || !email) { alert('Name and email are required'); return; }
   try {
-    await api('createJuror', name, email, password, role);
+    await api('createJuror', name, email, role);
+    adminJurors = await api('getAllJurors');
+    renderAdminPage();
+  } catch (e) {
+    alert('Failed: ' + e.message);
+  }
+}
+
+async function deleteJuror(jurorId, name) {
+  if (!confirm('Remove juror "' + name + '"? They will no longer be able to log in.')) return;
+  try {
+    await api('deleteJuror', jurorId);
     adminJurors = await api('getAllJurors');
     renderAdminPage();
   } catch (e) {
@@ -1310,13 +1355,7 @@ function esc(str) {
 // ===========================
 document.addEventListener('DOMContentLoaded', () => {
   checkSession();
-  // Allow Enter key on login form
-  document.getElementById('loginPassword').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') doLogin();
-  });
-  document.getElementById('loginEmail').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') document.getElementById('loginPassword').focus();
-  });
+  initGoogleSignIn();
 });
 </script>
 </body>
